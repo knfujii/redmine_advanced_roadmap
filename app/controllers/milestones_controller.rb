@@ -7,20 +7,20 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-require 'advanced_roadmap/gruff/pie' if Object.const_defined?(:Magick)
+require 'gruff/pie' if Object.const_defined?(:Magick)
 
 class MilestonesController < ApplicationController
   
   menu_item :roadmap
   model_object Milestone
 
-  before_filter :find_model_object,
+  before_action :find_model_object,
                 :only => [:show, :edit, :update, :destroy]
-  before_filter :find_project_from_association,
+  before_action :find_project_from_association,
                 :only => [:show, :edit, :update, :destroy]
-  before_filter :find_project_by_project_id,
+  before_action :find_project_by_project_id,
                 :only => [:new, :create]
-  before_filter :authorize, :except => [:show, :total_graph]
+  before_action :authorize, :except => [:show, :total_graph]
 
   helper :custom_fields
   helper :projects
@@ -52,8 +52,8 @@ class MilestonesController < ApplicationController
   end
 
   def create
-    @milestone = @project.milestones.build(params[:milestone])
-    @milestone.user_id = User.current.id
+    @milestone = Milestone.new(:user_id => User.current.id, :project_id => @project.id)
+    @milestone.safe_attributes = params[:milestone]
     if request.post? and @milestone.save
       if params[:versions]
         params[:versions].each do |version|
@@ -90,20 +90,19 @@ class MilestonesController < ApplicationController
         end
       end
     end
-    if @milestone.update_attributes(params[:milestone])
-      versions_to_delete.each do |version|
-        milestone_version = MilestoneVersion.where(:milestone_id => @milestone.id, :version_id => version.id).first
-        milestone_version.destroy
-      end
-      versions_to_add.each do |version|
-        milestone_version = MilestoneVersion.new
-        milestone_version.milestone_id = @milestone.id
-        milestone_version.version_id = version
-        milestone_version.save
-      end
-      flash[:notice] = l(:notice_successful_update)
-      redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
+    @milestone.safe_attributes = params[:milestone]
+    versions_to_delete.each do |version|
+      milestone_version = MilestoneVersion.where(:milestone_id => @milestone.id, :version_id => version.id).first
+      milestone_version.destroy
     end
+    versions_to_add.each do |version|
+      milestone_version = MilestoneVersion.new
+      milestone_version.milestone_id = @milestone.id
+      milestone_version.version_id = version
+      milestone_version.save
+    end
+    flash[:notice] = l(:notice_successful_update)
+    redirect_to :controller => :projects, :action => :settings, :tab => 'milestones', :id => @project
   end
 
   def destroy
@@ -116,7 +115,7 @@ class MilestonesController < ApplicationController
 
   def total_graph
     if Object.const_defined?(:Magick)
-      g = AdvancedRoadmap::Gruff::Pie.new(params[:size] || '500x400')
+      g = Gruff::Pie.new(params[:size] || '500x400')
       g.hide_title = true
       g.theme = graph_theme
       g.margins = 0

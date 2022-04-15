@@ -14,7 +14,8 @@ module AdvancedRoadmap
     def self.included(base)
       base.class_eval do
 
-        def visible_details_with_advanced_roadmap(user = User.current)
+        alias_method :visible_details_without_advanced_roadmap, :visible_details
+        def visible_details(user = User.current)
           details.select do |detail|
             if detail.property == 'cf'
               detail.custom_field && detail.custom_field.visible_by?(project, user)
@@ -27,7 +28,6 @@ module AdvancedRoadmap
             end
           end
         end
-        alias_method_chain :visible_details, :advanced_roadmap
 
       end
     end

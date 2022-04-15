@@ -16,19 +16,19 @@ module AdvancedRoadmap
   
         has_many :milestone_versions, :dependent => :destroy
         has_many :milestones, :through => :milestone_versions
-  
-        def completed_percent_with_advanced_info
+
+        alias_method :completed_percent_without_advanced_info, :completed_percent
+        def completed_percent
           calculate_advance_info unless @total_ratio
           @total_ratio
         end
-        alias_method_chain :completed_percent, :advanced_info
-  
-        def closed_percent_with_advanced_info
+
+        alias_method :closed_percent_without_advanced_info, :closed_percent
+        def closed_percent
           calculate_advance_info unless @total_finished_ratio
           @total_finished_ratio
         end
-        alias_method_chain :closed_percent, :advanced_info
-  
+
         def rest_hours
           calculate_advance_info unless @total_pending
           @total_pending

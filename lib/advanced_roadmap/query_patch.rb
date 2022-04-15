@@ -37,14 +37,14 @@ module AdvancedRoadmap
           "(#{segments.join(') AND (')})" unless segments.empty?
         end
 
-        def available_totalable_columns_with_advanced_roadmap
+        alias_method :available_totalable_columns_without_advanced_roadmap, :available_totalable_columns
+        def available_totalable_columns
           columns = available_totalable_columns_without_advanced_roadmap
           unless User.current.allowed_to?(:view_issue_estimated_hours, self.project)
             columns.delete_if {|column| column.name == :estimated_hours}
           end
           return columns
         end
-        alias_method_chain :available_totalable_columns, :advanced_roadmap
 
       end
     end
