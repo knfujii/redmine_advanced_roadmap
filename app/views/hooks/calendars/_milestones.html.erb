@@ -1,0 +1,33 @@
+<script language="javascript">
+  function AddMilestoneToDay(milestoneName, milestoneUrl, day, week)
+  {
+    var cellElement = null;
+    var weekElement = $('.cal').find('td.week-number').filter(':contains("' + week + '")').first();
+    if (weekElement)
+    {
+      var dayElement = weekElement.parent().find('p.day-num').filter(':contains("' + day + '")').first();
+      if (dayElement)
+      {
+        cellElement = dayElement.parent();
+      }
+    }
+    if (cellElement != null)
+    {
+      var link = document.createElement("a");
+      link.innerHTML = milestoneName;
+      link.href = milestoneUrl;
+      var milestone = document.createElement("span");
+      milestone.className = "icon icon-milestone calendar-milestone";
+      milestone.appendChild(link);
+      cellElement.append(milestone);
+    }
+  }
+  <%- if milestones and milestones.any? -%>
+    <%- milestones.each do |milestone| -%>
+      AddMilestoneToDay("<%= milestone[:name] %>", "<%= milestone[:url] %>",
+                        <%= milestone[:day] %>, <%= milestone[:week] %>);
+    <%- end -%>
+  <%- end -%>
+</script>
+
+<%= render :partial => 'common/advanced_roadmap_footer' %>
