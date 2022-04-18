@@ -5,7 +5,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class ChangeMilestonesDates < ActiveRecord::Migration
+class ChangeMilestonesDates < ActiveRecord::Migration[4.2]
   def self.up
     rename_column :milestones, :effective_date, :milestone_effective_date
   end

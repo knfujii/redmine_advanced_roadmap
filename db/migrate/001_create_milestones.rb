@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class CreateMilestones < ActiveRecord::Migration
+class CreateMilestones < ActiveRecord::Migration[4.2]
   def self.up
     create_table :milestones, :force => true do |t|
       t.column :name,             :string,                            :null => false

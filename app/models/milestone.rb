@@ -16,7 +16,6 @@ class Milestone < ActiveRecord::Base
 
   include Redmine::SafeAttributes
   safe_attributes :name, :description, :milestone_effective_date
-  attr_protected :id
 
   validates_presence_of :name
   validates_uniqueness_of :name, :scope => [:project_id]

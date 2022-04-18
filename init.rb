@@ -7,11 +7,6 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-# This plugin should be reloaded in development mode.
-if (Rails.env == 'development')
-  ActiveSupport::Dependencies.autoload_once_paths.reject!{|x| x =~ /^#{Regexp.escape(File.dirname(__FILE__))}/}
-end
-
 require 'redmine'
 require 'rubygems'
 require 'gravatar'
@@ -36,9 +31,9 @@ Redmine::Plugin.register :advanced_roadmap do
   author 'Emilio González Montaña'
   author_url 'http://ociotec.com'
   description 'This is a plugin for Redmine that is used to show more information inside the Roadmap page and implements the milestones featuring.'
-  version '0.12.0'
+  version '0.13.0'
   permission :manage_milestones, {:milestones => [:new, :create, :edit, :update, :destroy]}
-  requires_redmine :version_or_higher => '3.0.0'
+  requires_redmine :version_or_higher => '4.0.0'
 
   project_module :issue_tracking do
     permission :view_issue_estimated_hours, {}

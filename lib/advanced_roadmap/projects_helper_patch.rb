@@ -14,7 +14,8 @@ module AdvancedRoadmap
     def self.included(base)
       base.class_eval do
 
-        def project_settings_tabs_with_more_tabs
+        alias_method :project_settings_tabs_without_more_tabs, :project_settings_tabs
+        def project_settings_tabs
           tabs = project_settings_tabs_without_more_tabs
           if User.current.allowed_to?(:manage_milestones, @project)
             options = {:name => 'versions', :action => :manage_versions,
@@ -38,7 +39,6 @@ module AdvancedRoadmap
           end
           return(tabs)
         end
-        alias_method_chain :project_settings_tabs, :more_tabs
 
       end
     end

@@ -7,7 +7,7 @@
 #   * No derivates of this plugin (or partial) are allowed.
 # Take a look to licence.txt file at plugin root folder for further details.
 
-class CreateMilestoneVersions < ActiveRecord::Migration
+class CreateMilestoneVersions < ActiveRecord::Migration[4.2]
   def self.up
     create_table :milestone_versions, :force => true do |t|
       t.column :milestone_id,     :integer,                           :null => false

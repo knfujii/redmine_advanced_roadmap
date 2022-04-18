@@ -9,6 +9,8 @@ es:
   label_milestone: "Hito"
   label_milestone_new: "Nuevo %{milestone_label}"
   label_milestone_plural: "Hitos"
+  label_orphan_issues: "Peticiones huérfanas"
+  label_orphan_versions: "Versiones huérfanas"
   label_setting_color_bad: "Color del factor de velocidad mala"
   label_setting_color_good: "Color del factor de velocidad buena"
   label_setting_color_very_bad: "Color del factor de velocidad muy mala"
